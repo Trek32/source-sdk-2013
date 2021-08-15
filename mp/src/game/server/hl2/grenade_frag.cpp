@@ -159,10 +159,21 @@ void CGrenadeFrag::CreateEffects( void )
 
 	int	nAttachment = LookupAttachment( "fuse" );
 
+	Vector vUp, vEffectPos = GetAbsOrigin();
+	GetVectors( NULL, NULL, &vUp );
+
+	if( vUp.IsValid() )
+		vEffectPos += vUp * WorldAlignMaxs().z * 2;
+
 	if ( m_pMainGlow != NULL )
 	{
-		m_pMainGlow->FollowEntity( this );
-		m_pMainGlow->SetAttachment( this, nAttachment );
+		m_pMainGlow->SetParent( this );
+
+		if( nAttachment )
+			m_pMainGlow->SetAttachment( this, nAttachment );
+		else
+			m_pMainGlow->SetAbsOrigin( vEffectPos );
+
 		m_pMainGlow->SetTransparency( kRenderGlow, 255, 255, 255, 200, kRenderFxNoDissipation );
 		m_pMainGlow->SetScale( 0.2f );
 		m_pMainGlow->SetGlowProxySize( 4.0f );
@@ -173,8 +184,13 @@ void CGrenadeFrag::CreateEffects( void )
 
 	if ( m_pGlowTrail != NULL )
 	{
-		m_pGlowTrail->FollowEntity( this );
-		m_pGlowTrail->SetAttachment( this, nAttachment );
+		m_pGlowTrail->SetParent( this );
+
+		if( nAttachment )
+			m_pGlowTrail->SetAttachment( this, nAttachment );
+		else
+			m_pGlowTrail->SetAbsOrigin( vEffectPos );
+
 		m_pGlowTrail->SetTransparency( kRenderTransAdd, 255, 0, 0, 255, kRenderFxNone );
 		m_pGlowTrail->SetStartWidth( 8.0f );
 		m_pGlowTrail->SetEndWidth( 1.0f );
