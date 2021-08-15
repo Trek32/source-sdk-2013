@@ -507,16 +507,14 @@ void CHL2MP_Player::SetupPlayerSoundsByModel( const char *pModelName )
 
 void CHL2MP_Player::ResetAnimation( void )
 {
-	if ( IsAlive() )
+	if( IsAlive() )
 	{
-		SetSequence ( -1 );
+		SetSequence( -1 );
 		SetActivity( ACT_INVALID );
 
-		if (!GetAbsVelocity().x && !GetAbsVelocity().y)
+		if( !GetAbsVelocity().x && !GetAbsVelocity().y )
 			SetAnimation( PLAYER_IDLE );
-		else if ((GetAbsVelocity().x || GetAbsVelocity().y) && ( GetFlags() & FL_ONGROUND ))
-			SetAnimation( PLAYER_WALK );
-		else if (GetWaterLevel() > 1)
+		else
 			SetAnimation( PLAYER_WALK );
 	}
 }
