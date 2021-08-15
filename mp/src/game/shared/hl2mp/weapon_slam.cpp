@@ -455,18 +455,20 @@ void CWeapon_SLAM::StartTripmineAttach( void )
 // Output :
 //-----------------------------------------------------------------------------
 void CWeapon_SLAM::SatchelThrow( void )
-{	
+{
 #ifndef CLIENT_DLL
 	m_bThrowSatchel = false;
 
 	// Only the player fires this way so we can cast
 	CBasePlayer *pPlayer = ToBasePlayer( GetOwner() );
 
-	Vector vecSrc	 = pPlayer->WorldSpaceCenter();
-	Vector vecFacing = pPlayer->BodyDirection3D( );
-	vecSrc = vecSrc + vecFacing * 18.0;
-	// BUGBUG: is this because vecSrc is not from Weapon_ShootPosition()???
-	vecSrc.z += 24.0f;
+	Vector vecEye = pPlayer->EyePosition();
+	Vector vecFacing = pPlayer->BodyDirection3D();
+
+	Vector vForward, vUp;
+	pPlayer->EyeVectors( &vForward, NULL, &vUp );
+
+	Vector vecSrc = vecEye + vForward * 18.0 - vUp * 3.0;
 
 	Vector vecThrow;
 	GetOwner()->GetVelocity( &vecThrow, NULL );
@@ -474,15 +476,15 @@ void CWeapon_SLAM::SatchelThrow( void )
 
 	// Player may have turned to face a wall during the throw anim in which case
 	// we don't want to throw the SLAM into the wall
-	if (CanAttachSLAM())
+	if( CanAttachSLAM() )
 	{
 		vecThrow = vecFacing;
-		vecSrc   = pPlayer->WorldSpaceCenter() + vecFacing * 5.0;
-	}	
+		vecSrc = pPlayer->WorldSpaceCenter() + vecFacing * 5.0;
+	}
 
-	CSatchelCharge *pSatchel = (CSatchelCharge*)Create( "npc_satchel", vecSrc, vec3_angle, GetOwner() );
+	CSatchelCharge *pSatchel = ( CSatchelCharge * )Create( "npc_satchel", vecSrc, vec3_angle, GetOwner() );
 
-	if ( pSatchel )
+	if( pSatchel )
 	{
 		pSatchel->SetThrower( GetOwner() );
 		pSatchel->ApplyAbsVelocityImpulse( vecThrow );
