@@ -674,6 +674,14 @@ void CBreakableProp::HandleInteractionStick( int index, gamevcollisionevent_t *p
 		Vector vecNormal;
 		pEvent->pInternalData->GetSurfaceNormal( vecNormal );
 
+		Vector vecUp;
+		GetVectors( NULL, NULL, &vecUp );
+
+		// Checks all three coordinates ( x, y, z ). This avoids the sawblade getting stuck in texture.
+		for( int i = 0; i < 3; i++ )
+			if( abs( vecNormal[i] ) > .0f && abs( vecUp[i] ) > .75f )
+				return;
+
 		// we want the normal that points away from this object
 		if ( index == 1 )
 		{
