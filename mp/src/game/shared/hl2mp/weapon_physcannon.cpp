@@ -565,7 +565,16 @@ void CGrabController::AttachEntity( CBasePlayer *pPlayer, CBaseEntity *pEntity, 
 		m_attachedAnglesPlayerSpace = AlignAngles( m_attachedAnglesPlayerSpace, m_angleAlignment );
 	}
 
-	VectorITransform( pEntity->WorldSpaceCenter(), pEntity->EntityToWorldTransform(), m_attachedPositionObjectSpace );
+	Vector vUp, vWorlSpaceCenter = pEntity->WorldSpaceCenter();
+
+	if( FStrEq( pEntity->GetClassname(), "npc_grenade_frag" ) )
+	{
+		pEntity->GetVectors( NULL, NULL, &vUp );
+		if( vUp.IsValid() )
+			vWorlSpaceCenter += vUp * pEntity->WorldAlignMaxs().z;
+	}
+
+	VectorITransform( vWorlSpaceCenter, pEntity->EntityToWorldTransform(), m_attachedPositionObjectSpace );
 
 #ifndef CLIENT_DLL
 	// If it's a prop, see if it has desired carry angles
