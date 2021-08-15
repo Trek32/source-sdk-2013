@@ -70,6 +70,7 @@ void CSatchelCharge::Spawn( void )
 
 	UTIL_SetSize(this, Vector( -6, -6, -2), Vector(6, 6, 2));
 
+	SetTouch( &CSatchelCharge::SatchelTouch );
 	SetThink( &CSatchelCharge::SatchelThink );
 	SetNextThink( gpGlobals->curtime + 0.1f );
 
@@ -194,6 +195,12 @@ void CSatchelCharge::BounceSound( void )
 	{
 		m_flNextBounceSoundTime = gpGlobals->curtime + 0.1;
 	}
+}
+
+void CSatchelCharge::SatchelTouch( CBaseEntity *pOther )
+{
+	if( FStrEq( pOther->GetClassname(), "crossbow_bolt" ) )
+		pOther->Touch( this );
 }
 
 //-----------------------------------------------------------------------------
