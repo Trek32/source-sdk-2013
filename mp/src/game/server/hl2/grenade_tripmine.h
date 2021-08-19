@@ -5,6 +5,10 @@
 // $NoKeywords: $
 //=============================================================================//
 
+#include "hl2mp/grenade_tripmine.h"
+
+#if 0
+
 #ifndef GRENADE_TRIPMINE_H
 #define GRENADE_TRIPMINE_H
 #ifdef _WIN32
@@ -53,3 +57,5 @@ private:
 };
 
 #endif // GRENADE_TRIPMINE_H
+
+#endif

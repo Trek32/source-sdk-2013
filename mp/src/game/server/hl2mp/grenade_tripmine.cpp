@@ -124,6 +124,12 @@ void CTripmineGrenade::PowerupThink( void  )
 		// play enabled sound
 		EmitSound( "TripmineGrenade.Activate" );
 	}
+	else if( !IsValidPosToStay() )
+	{
+		Explode();
+		return;
+	}
+
 	SetNextThink( gpGlobals->curtime + 0.1f );
 }
 
@@ -135,6 +141,20 @@ void CTripmineGrenade::KillBeam( void )
 		UTIL_Remove( m_pBeam );
 		m_pBeam = NULL;
 	}
+}
+
+void CTripmineGrenade::AttachToEntity( CBaseEntity *pEntity )
+{
+	m_pAttachedEnt		= pEntity;
+	m_vecAttachedPos	= pEntity->GetAbsOrigin();
+	m_angAttachedAng	= pEntity->GetAbsAngles();
+}
+
+bool CTripmineGrenade::IsValidPosToStay()
+{
+	return m_pAttachedEnt
+		&& m_pAttachedEnt->GetAbsOrigin() == m_vecAttachedPos
+		&& m_pAttachedEnt->GetAbsAngles() == m_angAttachedAng;
 }
 
 
@@ -215,14 +235,18 @@ void CTripmineGrenade::BeamBreakThink( void  )
 			m_hOwner = tr.m_pEnt;	// reset owner too
 	}
 
+	if( !IsValidPosToStay() )
+	{
+		Explode();
+		return;
+	}
 
 	CBaseEntity *pEntity = tr.m_pEnt;
 	CBaseCombatCharacter *pBCC  = ToBaseCombatCharacter( pEntity );
 
 	if (pBCC || fabs( m_flBeamLength - tr.fraction ) > 0.001)
 	{
-		m_iHealth = 0;
-		Event_Killed( CTakeDamageInfo( (CBaseEntity*)m_hOwner, this, 100, GIB_NORMAL ) );
+		Explode();
 		return;
 	}
 
@@ -252,12 +276,20 @@ int CTripmineGrenade::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 //-----------------------------------------------------------------------------
 void CTripmineGrenade::Event_Killed( const CTakeDamageInfo &info )
 {
+	m_pAttachedEnt = nullptr;
+
 	m_takedamage		= DAMAGE_NO;
 
 	SetThink( &CTripmineGrenade::DelayDeathThink );
 	SetNextThink( gpGlobals->curtime + 0.25 );
 
 	EmitSound( "TripmineGrenade.StopSound" );
+}
+
+void CTripmineGrenade::Explode()
+{
+	m_iHealth = 0;
+	Event_Killed( CTakeDamageInfo( ( CBaseEntity * )m_hOwner, this, 100, GIB_NORMAL ) );
 }
 
 
