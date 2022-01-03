@@ -994,6 +994,10 @@ bool CWeapon_SLAM::Deploy( void )
 
 	m_tSlamState		= (int)SLAM_SATCHEL_THROW;
 
+	m_bThrowSatchel		= false;
+	m_bAttachSatchel	= false;
+	m_bAttachTripmine	= false;
+
 	// ------------------------------
 	// Pick the right draw animation
 	// ------------------------------
