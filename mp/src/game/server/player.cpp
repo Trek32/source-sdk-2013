@@ -7364,6 +7364,8 @@ void CBasePlayer::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 	{
 		Weapon_Switch( pWeapon );
 	}
+	else
+		pWeapon->AddEffects( EF_NOSHADOW | EF_NORECEIVESHADOW );
 }
 
 

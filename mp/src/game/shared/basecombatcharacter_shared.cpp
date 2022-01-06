@@ -59,7 +59,12 @@ bool CBaseCombatCharacter::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmo
 			return false;
 	}
 
+	if( m_hActiveWeapon )
+		m_hActiveWeapon->AddEffects( EF_NOSHADOW | EF_NORECEIVESHADOW );		// hide shadow of the last active weapon
+
 	m_hActiveWeapon = pWeapon;
+
+	pWeapon->RemoveEffects( EF_NOSHADOW | EF_NORECEIVESHADOW );
 
 	return pWeapon->Deploy( );
 }
