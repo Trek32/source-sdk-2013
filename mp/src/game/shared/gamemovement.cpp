@@ -4359,6 +4359,9 @@ void CGameMovement::Duck( void )
 	// Slow down ducked players.
 	HandleDuckingSpeedCrop();
 
+	if( ( mv->m_nButtons & IN_DUCK ) && player->m_Local.m_bDucked && player->m_Local.m_bDucking )
+		player->SetViewOffset( GetPlayerViewOffset( true ) );
+
 	// If the player is holding down the duck button, the player is in duck transition, ducking, or duck-jumping.
 	if ( ( mv->m_nButtons & IN_DUCK ) || player->m_Local.m_bDucking  || bInDuck || bDuckJump )
 	{
