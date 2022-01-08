@@ -851,6 +851,12 @@ void CPropCombineBall::OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup
 		Vector vecVelocity;
 		VPhysicsGetObject()->GetVelocity( &vecVelocity, NULL );
 
+		Vector vecEyeDir;
+		pPhysGunUser->EyeVectors( &vecEyeDir );
+
+		Vector vecNewVel = vecEyeDir * vecVelocity.Length();
+		VPhysicsGetObject()->SetVelocity( &vecNewVel, &vec3_origin );
+
 		SetSpeed( vecVelocity.Length() );
 
 		// Set us as being launched by the player
