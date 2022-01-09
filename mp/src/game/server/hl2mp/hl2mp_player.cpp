@@ -1223,6 +1223,19 @@ void CHL2MP_Player::Event_Killed( const CTakeDamageInfo &info )
 	CTakeDamageInfo subinfo = info;
 	subinfo.SetDamageForce( m_vecTotalBulletForce );
 
+	if( LadderMove_t *pLadderMove = GetLadderMove() )
+	{
+		ExitLadder();
+
+		pLadderMove->m_bForceLadderMove = false;
+
+		if( CHandle< CReservePlayerSpot > &hReservedSpot = pLadderMove->m_hReservedSpot )
+		{
+			UTIL_Remove( reinterpret_cast< CBaseEntity * >( hReservedSpot.Get() ) );
+			hReservedSpot = NULL;
+		}
+	}
+
 	SetNumAnimOverlays( 0 );
 
 	// Note: since we're dead, it won't draw us on the client, but we don't set EF_NODRAW
