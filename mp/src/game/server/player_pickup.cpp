@@ -24,8 +24,11 @@ void Pickup_ForcePlayerToDropThisObject( CBaseEntity *pTarget )
 
 	if ( pPhysics->GetGameFlags() & FVPHYSICS_PLAYER_HELD )
 	{
-		CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
-		pPlayer->ForceDropOfCarriedPhysObjects( pTarget );
+		CBaseEntity *pOwnerEnt = pTarget->GetOwnerEntity();
+
+		if( pOwnerEnt && pOwnerEnt->IsPlayer() )
+			if( CBasePlayer *pOwnerPly = ToBasePlayer( pOwnerEnt ) )
+				pOwnerPly->ForceDropOfCarriedPhysObjects( pTarget );
 	}
 }
 
