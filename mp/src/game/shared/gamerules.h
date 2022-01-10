@@ -335,7 +335,7 @@ public:
 	virtual float GetAmmoQuantityScale( int iAmmoIndex ) { return 1.0f; }
 
 // AI Definitions
-	virtual void			InitDefaultAIRelationships( void ) { return; }
+	virtual void			InitDefaultAIRelationships( void );
 	virtual const char*		AIClassText(int classType) { return NULL; }
 
 // Healthcharger respawn control
