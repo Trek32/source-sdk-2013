@@ -1952,6 +1952,9 @@ void CWeaponPhysCannon::SecondaryAttack( void )
 	}
 	else
 	{
+		if( m_grabController.GetAttached() )
+			return;
+
 		// Otherwise pick it up
 		FindObjectResult_t result = FindObject();
 		switch ( result )
@@ -1966,7 +1969,6 @@ void CWeaponPhysCannon::SecondaryAttack( void )
 			break;
 
 		case OBJECT_NOT_FOUND:
-			m_flNextSecondaryAttack = gpGlobals->curtime + 0.1f;
 			CloseElements();
 			break;
 
@@ -2098,7 +2100,7 @@ CWeaponPhysCannon::FindObjectResult_t CWeaponPhysCannon::FindObject( void )
 	UTIL_TraceLine( start, end, MASK_SHOT|CONTENTS_GRATE, &filter, &tr );
 	
 	// Try again with a hull trace
-	if ( ( tr.fraction == 1.0 ) || ( tr.m_pEnt == NULL ) || ( tr.m_pEnt->IsWorld() ) )
+	if ( ( tr.fraction == 1.0 ) || !CanPickupObject( tr.m_pEnt ) )
 	{
 		UTIL_TraceHull( start, end, -Vector(4,4,4), Vector(4,4,4), MASK_SHOT|CONTENTS_GRATE, &filter, &tr );
 	}
@@ -2108,7 +2110,7 @@ CWeaponPhysCannon::FindObjectResult_t CWeaponPhysCannon::FindObject( void )
 	bool	bPull = false;
 
 	// If we hit something, pick it up or pull it
-	if ( ( tr.fraction != 1.0f ) && ( tr.m_pEnt ) && ( tr.m_pEnt->IsWorld() == false ) )
+	if ( ( tr.fraction != 1.0f ) && CanPickupObject( tr.m_pEnt ) )
 	{
 		// Attempt to attach if within range
 		if ( tr.fraction <= 0.25f )
@@ -2177,7 +2179,7 @@ CWeaponPhysCannon::FindObjectResult_t CWeaponPhysCannon::FindObject( void )
 	// If we're too far, simply start to pull the object towards us
 	Vector	pullDir = start - pEntity->WorldSpaceCenter();
 	VectorNormalize( pullDir );
-	pullDir *= physcannon_pullforce.GetFloat();
+	pullDir *= physcannon_pullforce.GetFloat() * TICK_INTERVAL * 10;
 	
 	float mass = PhysGetEntityMass( pEntity );
 	if ( mass < 50.0f )
@@ -2786,6 +2788,9 @@ bool CWeaponPhysCannon::CanPickupObject( CBaseEntity *pTarget )
 {
 #ifndef CLIENT_DLL
 	if ( pTarget == NULL )
+		return false;
+
+	if ( pTarget->GetMoveType() != MOVETYPE_VPHYSICS )
 		return false;
 
 	if ( pTarget->GetBaseAnimating() && pTarget->GetBaseAnimating()->IsDissolving() )
