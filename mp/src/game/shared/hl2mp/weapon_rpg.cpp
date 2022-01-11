@@ -1550,10 +1550,7 @@ void CWeaponRPG::ItemPostFrame( void )
 
 	//If we're pulling the weapon out for the first time, wait to draw the laser
 	if ( ( m_bInitialStateUpdate ) && ( GetActivity() != ACT_VM_DRAW ) )
-	{
-		StartGuiding();
 		m_bInitialStateUpdate = false;
-	}
 
 	// Supress our guiding effects if we're lowered
 	if ( GetIdealActivity() == ACT_VM_IDLE_LOWERED )
