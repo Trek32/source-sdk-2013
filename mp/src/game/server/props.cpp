@@ -2486,6 +2486,8 @@ bool CPhysicsProp::IsGib()
 //-----------------------------------------------------------------------------
 void CPhysicsProp::Spawn( )
 {
+	m_bFirstCollisionAfterLaunch = false;
+
 	if (HasSpawnFlags(SF_PHYSPROP_IS_GIB))
 	{
 		g_ActiveGibCount++;
