@@ -86,6 +86,8 @@ protected:
 	float					m_flMarkDeadTime;
 	float					m_flDamage;
 
+	bool					m_bIsUnderwater;
+
 private:
 	float					m_flGracePeriodEndsAt;
 

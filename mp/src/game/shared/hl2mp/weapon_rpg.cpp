@@ -555,6 +555,15 @@ void CMissile::SeekThink( void )
 	float		flBestDist	= MAX_TRACE_LENGTH;
 	float		dotDist;
 
+	bool bOldUnderWater = m_bIsUnderwater;
+	m_bIsUnderwater = GetWaterLevel() > 0;
+
+	Vector vecForward;
+	AngleVectors( GetLocalAngles(), &vecForward );
+
+	if( !m_bIsUnderwater && bOldUnderWater )
+		SetAbsVelocity( vecForward * RPG_SPEED );
+
 	// If we have a grace period, go solid when it ends
 	if ( m_flGracePeriodEndsAt )
 	{
