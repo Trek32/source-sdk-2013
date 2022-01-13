@@ -682,7 +682,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	bool CMultiplayRules::FPlayerCanRespawn( CBasePlayer *pPlayer )
 	{
-		return true;
+		return gpGlobals->curtime > ( pPlayer->GetDeathTime() + DEATH_ANIMATION_TIME );
 	}
 
 	//=========================================================
