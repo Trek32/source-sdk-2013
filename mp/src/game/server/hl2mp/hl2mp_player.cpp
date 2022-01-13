@@ -956,7 +956,7 @@ bool CHL2MP_Player::HandleCommand_JoinTeam( int team )
 			return false;
 		}
 
-		if ( GetTeamNumber() != TEAM_UNASSIGNED && !IsDead() )
+		if ( GetTeamNumber() != TEAM_UNASSIGNED && IsAlive() )
 		{
 			m_fNextSuicideTime = gpGlobals->curtime;	// allow the suicide to work
 
