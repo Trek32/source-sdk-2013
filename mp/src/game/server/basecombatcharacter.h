@@ -329,6 +329,9 @@ public:
 
 	virtual void			SetLightingOriginRelative( CBaseEntity *pLightingOrigin );
 
+	void					SetPickupItemsOverAny( bool bAllow ) { m_bPickupItemsOverAny = bAllow; }
+	bool					GetPickupItemsOverAny()				 { return m_bPickupItemsOverAny; }
+
 protected:
 	Relationship_t			*FindEntityRelationship( CBaseEntity *pTarget );
 
@@ -499,6 +502,8 @@ private:
 	float				m_flDamageAccumulator;	// so very small amounts of damage do not get lost.
 	int					m_iDamageCount;			// # of times NPC has been damaged.  used for tracking 1-shot kills.
 	
+	bool				m_bPickupItemsOverAny;
+
 	// Weapon proficiency gets calculated each time an NPC changes his weapon, and then
 	// cached off as the CurrentWeaponProficiency.
 	WeaponProficiency_t m_CurrentWeaponProficiency;

@@ -5704,7 +5704,9 @@ CBaseEntity	*CBasePlayer::GiveNamedItem( const char *pszName, int iSubType )
 
 	if ( pent != NULL && !(pent->IsMarkedForDeletion()) ) 
 	{
+		SetPickupItemsOverAny( true );
 		pent->Touch( this );
+		SetPickupItemsOverAny( false );
 	}
 
 	return pent;

@@ -348,6 +348,9 @@ bool UTIL_ItemCanBeTouchedByPlayer( CBaseEntity *pItem, CBasePlayer *pPlayer )
 	if ( pPlayer->IsInAVehicle() )
 		return true;
 
+	if( pPlayer->GetPickupItemsOverAny() )
+		return true;
+
 	// Get our test positions
 	Vector vecStartPos;
 	IPhysicsObject *pPhysObj = pItem->VPhysicsGetObject();
