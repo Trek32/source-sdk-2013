@@ -616,9 +616,14 @@ extern ConVar sv_maxunlag;
 
 bool CHL2MP_Player::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, const CUserCmd *pCmd, const CBitVec<MAX_EDICTS> *pEntityTransmitBits ) const
 {
+	bool bShotgunLagComp = false;
+
+	if( CBaseCombatWeapon *pWeapon = GetActiveWeapon() )
+		bShotgunLagComp = pWeapon->ClassMatches( "weapon_shotgun" ) && ( pCmd->buttons & IN_ATTACK2 );
+
 	// No need to lag compensate at all if we're not attacking in this command and
 	// we haven't attacked recently.
-	if ( !( pCmd->buttons & IN_ATTACK ) && (pCmd->command_number - m_iLastWeaponFireUsercmd > 5) )
+	if ( !( pCmd->buttons & IN_ATTACK ) && !bShotgunLagComp && (pCmd->command_number - m_iLastWeaponFireUsercmd > 5) )
 		return false;
 
 	// If this entity hasn't been transmitted to us and acked, then don't bother lag compensating it.
