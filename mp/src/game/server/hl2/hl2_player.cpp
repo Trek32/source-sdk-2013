@@ -1702,6 +1702,9 @@ void CHL2_Player::CommanderMode()
 //-----------------------------------------------------------------------------
 void CHL2_Player::CheatImpulseCommands( int iImpulse )
 {
+	if( !sv_cheats->GetBool() && iImpulse != 50 )
+		return;
+
 	switch( iImpulse )
 	{
 	case 50:
