@@ -2762,6 +2762,8 @@ bool CNPC_AntlionGuard::HandleChargeImpact( Vector vecImpact, CBaseEntity *pEnti
 	// If it's a vphysics object that's too heavy, crash into it too.
 	if ( pEntity->GetMoveType() == MOVETYPE_VPHYSICS )
 	{
+		ApplyChargeDamage( this, pEntity, 250 );	// 250 - default charge damage to non-player object
+
 		IPhysicsObject *pPhysics = pEntity->VPhysicsGetObject();
 		if ( pPhysics )
 		{
